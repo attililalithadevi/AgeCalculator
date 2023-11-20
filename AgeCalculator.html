@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Age Calculator</title>
+</head>
+<style>
+	body{
+		color: #F3F3F3;
+		background: #000001;
+		width: 100vw;
+		height: 100vh;
+	}
+	.heading{
+		display: flex;
+		justify-content: center;
+		font-size: 57px;
+		animation: glow 2s ease-in-out infinite;
+		color: yellow;
+		text-decoration: 2px double underline green;
+	}
+	@keyframes glow {
+		0%,20%,40%,60%,80%{
+		text-shadow: none;
+		opacity: 0.8;
+		}
+		20.1%,40.1%,60.1%,80.1%,100%{
+			opacity: 1;
+			text-shadow: 0 0 1px #D3D3D3,
+		             0 0 2px #D3D3D3,
+		             0 0 3px #D3D3D3,
+		             0 0 4px #D3D3D3;
+		}
+	}
+	form{
+		width: 300px;
+		height: 350px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-evenly;
+		align-items: center;
+		border: 1px solid #000;
+		background: #010101;
+		border-radius: 13px;
+		box-shadow: 0 0 2px #EEE;
+		backdrop-filter: blur(100px);
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+	}
+	label{
+		display: flex;
+		flex-direction: column;
+		justify-content: space-evenly;
+		align-items: center;
+		height: 100px;
+
+	}
+	label span{
+		font-size: 23px;
+	}
+	label input{
+		outline: none;
+		border: none;
+		width: 210px;
+		height: 30px;
+		cursor: pointer;
+		font-size: 23px;
+		color: #F3F3F3;
+		border-radius: 5px;
+		background: #AAA;
+	}
+	label input::-webkit-datetime-edit-text{
+		padding: 0px 10px;
+		color: #E21;
+	}
+	label input::-webkit-datetime-edit-day-field{
+		color: blue;
+	}
+	label input::-webkit-datetime-edit-month-field{
+		color: purple;
+	}
+	label input::-webkit-datetime-edit-year-field{
+		color: green;
+	}
+	label input::-webkit-calendar-picker-indicator{
+		color: white;
+	}
+	.submit{
+		width: 80px;
+		aspect-ratio: 3/1.7;
+		font-size: 19px;
+		font-weight: 500;
+		background: wheat;
+		color: midnightblue;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+	.InvalidMessage{
+		color: #E21;
+		font-size: 21px;
+	}
+	.AgeDetails{
+		color: #AEA;
+		font-size: 21px;
+	}
+	.response{
+		position: absolute;
+		bottom: 50px;
+		left: 42%;
+	}
+</style>
+<body>
+	<span class="heading">Age Calculator</span>
+	<form>
+		<label>
+			<span>Select Your Date of Birth</span>
+			<input type="date">
+		</label>
+		<input type="button" class="submit" value="Submit">
+	</form>
+	<div class="response">
+		<span class="InvalidMessage"></span>
+		<span class="AgeDetails"></span>
+	</div>
+</body>
+<script>
+	document.querySelector('.submit').addEventListener('click', VerifyDetails);
+
+	function VerifyDetails(){
+		let ele = document.querySelector('label > input');
+		let UserDateOfBirth = new Date(ele.value);
+		if(UserDateOfBirth == "Invalid Date"){
+			document.querySelector(".InvalidMessage").innerHTML = "Invalid Valid Date of Birth";
+			document.querySelector(".AgeDetails").innerHTML = '';
+		}
+		else{
+			document.querySelector(".InvalidMessage").innerHTML = '';
+			let Today = new Date();
+			let Years = Today.getFullYear() - UserDateOfBirth.getFullYear();
+			let Months = Today.getMonth() - UserDateOfBirth.getMonth();
+
+			if(Months < 0){
+				Years -= 1;
+				Months = 12 - UserDateOfBirth.getMonth() + Today.getMonth();
+			}
+
+			let Days = Today.getDate() - UserDateOfBirth.getDate();
+
+			if(Days < 0){
+				Months -= 1;
+				if (Today.getMonth() === 0){
+					Days = 31 - UserDateOfBirth.getDate() + Today.getDate();
+				}
+				else{
+					Days = new Date(Today.getFullYear(), ((Today.getMonth() - 1 + 12) % 12) + 1, 0).getDate() - UserDateOfBirth.getDate() + Today.getDate();
+				}
+				
+			}
+
+			document.querySelector(".AgeDetails").innerHTML = Years + ' Years   ' + Months + '   Months ' + Days + 'Days';
+		}
+	}
+</script>
+</html>
